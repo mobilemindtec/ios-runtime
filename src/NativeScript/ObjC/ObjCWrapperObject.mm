@@ -20,7 +20,7 @@ void ObjCWrapperObject::finishCreation(VM& vm, id wrappedObject, GlobalObject* g
     Base::finishCreation(vm);
     this->setWrappedObject(wrappedObject);
     this->_canSetObjectAtIndexedSubscript = [wrappedObject respondsToSelector:@selector(setObject:
-                                                                                  atIndexedSubscript:)];
+                                                                                        atIndexedSubscript:)];
     this->_objectMap = [TNSRuntime runtimeForVM:&globalObject->vm()]->_objectMap.get();
     this->_objectMap->set(wrappedObject, this);
 }
@@ -32,7 +32,6 @@ WTF::String ObjCWrapperObject::className(const JSObject* object) {
 
 bool ObjCWrapperObject::getOwnPropertySlotByIndex(JSObject* object, ExecState* execState, unsigned propertyName, PropertySlot& propertySlot) {
     ObjCWrapperObject* wrapper = jsCast<ObjCWrapperObject*>(object);
-
     JSValue value = toValue(execState, [wrapper->wrappedObject() objectAtIndexedSubscript:propertyName]);
     propertySlot.setValue(object, None, value);
     return true;
